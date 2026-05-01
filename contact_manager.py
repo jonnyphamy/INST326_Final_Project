@@ -35,3 +35,18 @@ class Contact:
         self.category = category.strip().lower()
         self.favorite = favorite
 
+    def matches_keyword(self, keyword):
+        """Return whether a keyword appears in the contact data.
+
+        Args:
+            keyword (str): Search term provided by the user.
+
+        Returns:
+            bool: True if the keyword appears in the name, phone, email,
+                or category.
+        """
+        normalized_keyword = keyword.strip().lower()
+        return normalized_keyword in self.name.lower() \
+            or normalized_keyword in self.phone.lower() \
+            or normalized_keyword in self.email.lower() \
+            or normalized_keyword in self.category.lower()
