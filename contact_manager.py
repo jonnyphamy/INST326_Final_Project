@@ -18,18 +18,21 @@ class Contact:
         self.category = category
 
     def __repr__(self):
+        """returns a representation of the contact"""
         return (
             f"Contact('{self.name}', '{self.phone}', "
             f"'{self.email}', '{self.category}')"
         )
 
     def __str__(self):
+        """returns a string version of the contact"""
         return (
             f"{self.name} | Phone: {self.phone} | "
             f"Email: {self.email} | Category: {self.category}"
         )
 
     def __eq__(self, other):
+        """returns true if the contacts have the same attributes"""
         if not isinstance(other, Contact):
             return NotImplemented
 
@@ -41,6 +44,7 @@ class Contact:
         )
 
     def __lt__(self, other):
+        """returns true if the contacts name comes before another one"""
         if not isinstance(other, Contact):
             return NotImplemented
 
@@ -50,15 +54,18 @@ class ContactBook:
     """Represents a collection of Contact objects."""
 
     def __init__(self, owner):
+        """initializes a contactbook object"""
         self.owner = owner
         self.contacts = []
 
     def add_contact(self, contact):
+        """adds a contact object to the contact book"""
         if not isinstance(contact, Contact):
             raise ValueError("Only Contact objects can be added.")
         self.contacts.append(contact)
 
     def get_categories(self):
+        """returns a set of unique contact categories"""
         categories = set()
 
         for contact in self.contacts:
@@ -67,6 +74,7 @@ class ContactBook:
         return categories
 
     def get_category_counts(self):
+        """returns a dictionary counting contacts by their categories using counting pattern"""
         counts = {}
 
         for contact in self.contacts:
