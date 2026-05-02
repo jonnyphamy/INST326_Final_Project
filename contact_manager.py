@@ -45,7 +45,8 @@ class Contact:
             return NotImplemented
 
         return self.name < other.name
-    class ContactBook:
+    
+class ContactBook:
     """Represents a collection of Contact objects."""
 
     def __init__(self, owner):
@@ -81,3 +82,24 @@ class Contact:
                 matches.append(contact)
 
         return matches
+    def __repr__(self):
+        return f"ContactBook('{self.owner}', {self.contacts})"
+
+    def __str__(self):
+        return f"{self.owner}'s Contact Book with {len(self.contacts)} contacts"
+
+    def __len__(self):
+        return len(self.contacts)
+
+    def __contains__(self, contact):
+        return contact in self.contacts
+
+    def __iter__(self):
+        return iter(self.contacts)
+
+    def __getitem__(self, index):
+        return self.contacts[index]
+
+    def __add__(self, other):
+        if not isinstance(other, ContactBook):
+            return NotImplemented
