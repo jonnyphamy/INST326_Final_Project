@@ -45,3 +45,39 @@ class Contact:
             return NotImplemented
 
         return self.name < other.name
+    class ContactBook:
+    """Represents a collection of Contact objects."""
+
+    def __init__(self, owner):
+        self.owner = owner
+        self.contacts = []
+
+    def add_contact(self, contact):
+        if not isinstance(contact, Contact):
+            raise ValueError("Only Contact objects can be added.")
+        self.contacts.append(contact)
+
+    def get_categories(self):
+        categories = set()
+
+        for contact in self.contacts:
+            categories.add(contact.category)
+
+        return categories
+
+    def get_category_counts(self):
+        counts = {}
+
+        for contact in self.contacts:
+            counts[contact.category] = counts.get(contact.category, 0) + 1
+
+        return counts
+
+    def search_by_name(self, name):
+        matches = []
+
+        for contact in self.contacts:
+            if contact.name.lower() == name.lower():
+                matches.append(contact)
+
+        return matches
