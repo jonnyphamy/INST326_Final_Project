@@ -120,3 +120,56 @@ class ContactBook:
             new_book.add_contact(contact)
 
         return new_book
+if name == "main":
+
+    contact1 = Contact("Jay Pham", "301-555-1111", "jay@email.com", "school")
+    contact2 = Contact("Alex Kim", "240-555-2222", "alex@email.com", "work")
+    contact3 = Contact("Mia Lee", "443-555-3333", "mia@email.com", "school")
+    contact4 = Contact("Jay Pham", "301-555-1111", "jay@email.com", "school")
+
+    book1 = ContactBook("Jonathan")
+    book1.add_contact(contact1)
+    book1.add_contact(contact2)
+
+    book2 = ContactBook("Friend")
+    book2.add_contact(contact3)
+
+    print(book1)
+    print()
+
+    print("All contacts:")
+    for contact in book1:
+        print(contact)
+
+    print()
+    print("Number of contacts:", len(book1))
+
+    print()
+    print("First contact:", book1[0])
+
+    print()
+    print("Categories:", book1.get_categories())
+
+    print()
+    print("Category counts:", book1.get_category_counts())
+
+    print()
+    print("Search:", book1.search_by_name("Jay Pham"))
+
+    print()
+    print("Equality check:", contact1 == contact4)
+
+    print()
+    print("Membership:", contact1 in book1)
+
+    print()
+    print("Sorted:")
+    for contact in sorted(book1):
+        print(contact)
+
+    print()
+    combined = book1 + book2
+    print(combined)
+
+    for contact in combined:
+        print(contact) 
