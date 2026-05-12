@@ -90,6 +90,25 @@ class ContactBook:
                 matches.append(contact)
 
         return matches
+     
+    def get_contact_records(self):
+    
+        """Return all contacts as tuples."""
+
+        records = []
+
+        for contact in self.contacts:
+            records.append(
+            (
+                contact.name,
+                contact.phone,
+                contact.email,
+                contact.category
+            )
+        )
+
+        return records
+    
     
     def __repr__(self):
         """ returns a representation of the ContactBook object."""
