@@ -120,7 +120,7 @@ class ContactBook:
             new_book.add_contact(contact)
 
         return new_book
-if name == "main":
+if __name__ == "__main__":
 
     contact1 = Contact("Jay Pham", "301-555-1111", "jay@email.com", "school")
     contact2 = Contact("Alex Kim", "240-555-2222", "alex@email.com", "work")
