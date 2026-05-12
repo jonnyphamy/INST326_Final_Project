@@ -90,25 +90,56 @@ class ContactBook:
                 matches.append(contact)
 
         return matches
+    
     def __repr__(self):
+        """ returns a representation of the ContactBook object."""
         return f"ContactBook('{self.owner}', {self.contacts})"
 
     def __str__(self):
+
+        """returns the number of contacts in the contact book"""
         return f"{self.owner}'s Contact Book with {len(self.contacts)} contacts"
 
     def __len__(self):
-        return len(self.contacts)
+     """Check if a contact exists in the contact book.
+
+        Args:
+            contact (Contact): The contact to check.
+
+        Returns:
+            bool: True if the contact exists.
+        """    
+     return len(self.contacts)
 
     def __contains__(self, contact):
+        """returns an interator for the contacts list"""
         return contact in self.contacts
 
     def __iter__(self):
         return iter(self.contacts)
 
     def __getitem__(self, index):
+        """Return a contact at a specific index.
+
+        Args:
+            index (int): The position of the contact.
+
+        Returns:
+            Contact: The contact at the given index.
+        """
         return self.contacts[index]
 
     def __add__(self, other):
+        """
+     Combine two ContactBook objects.
+
+        Args:
+            other (ContactBook): This is another contact book.
+
+        Returns:
+            ContactBook: A new combined contact book.
+        """
+        
         if not isinstance(other, ContactBook):
             return NotImplemented
         new_book = ContactBook(self.owner + " and " + other.owner)
@@ -121,6 +152,8 @@ class ContactBook:
 
         return new_book
 if __name__ == "__main__":
+
+    """Run test code for the Contact Manager program."""
 
     contact1 = Contact("Jay Pham", "301-555-1111", "jay@email.com", "school")
     contact2 = Contact("Alex Kim", "240-555-2222", "alex@email.com", "work")
