@@ -111,3 +111,12 @@ class ContactBook:
     def __add__(self, other):
         if not isinstance(other, ContactBook):
             return NotImplemented
+        new_book = ContactBook(self.owner + " and " + other.owner)
+
+        for contact in self.contacts:
+            new_book.add_contact(contact)
+
+        for contact in other.contacts:
+            new_book.add_contact(contact)
+
+        return new_book
