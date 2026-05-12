@@ -1,185 +1,232 @@
-"""Tests for contact_manager.py."""
+class Contact:
+    """Represents one contact."""
 
+    def __init__(self, name, phone, email, category):
+        """Initialize a Contact object."""
+        if name == "": # Make sure the name is not blank
+            raise ValueError("Name cannot be empty.")
+        if phone == "": # Make sure the phone number is not blank
+            raise ValueError("Phone cannot be empty.")
+        if email == "": # Make sure the email is not blank
+            raise ValueError("Email cannot be empty.")
+        if category == "": # Make sure the category is not blank
+            raise ValueError("Category cannot be empty.")
 
-from contact_manager import Contact, ContactBook
+        # Save the contact information
+        self.name = name
+        self.phone = phone
+        self.email = email
+        self.category = category
 
+    def __repr__(self): 
+        """returns a representation of the contact"""
+        # Return a string that looks like the constructor call
+        return (
+            f"Contact('{self.name}', '{self.phone}', "
+            f"'{self.email}', '{self.category}')"
+        )
 
-def test_contact_attributes():
-    contact = Contact("Jay Pham", "301-555-1111", "jay@email.com", "school")
+    def __str__(self):
+        """returns a string version of the contact"""
+        # Return the contact information in a readable format
+        return (
+            f"{self.name} | Phone: {self.phone} | "
+            f"Email: {self.email} | Category: {self.category}"
+        )
 
-    assert contact.name == "Jay Pham"
-    assert contact.phone == "301-555-1111"
-    assert contact.email == "jay@email.com"
-    assert contact.category == "school"
+    def __eq__(self, other):
+        """returns true if the contacts have the same attributes"""
+        # Make sure the other object is a Contact
+        if not isinstance(other, Contact):
+            return NotImplemented
+        # Compare all attributes
+        return (
+            self.name == other.name
+            and self.phone == other.phone
+            and self.email == other.email
+            and self.category == other.category
+        )
 
+    def __lt__(self, other):
+        """returns true if the contacts name comes before another one"""
+        if not isinstance(other, Contact):  # Make sure the other object is a Contact
+            return NotImplemented
 
-def test_contact_equality():
-    contact1 = Contact("Jay Pham", "301-555-1111", "jay@email.com", "school")
-    contact2 = Contact("Jay Pham", "301-555-1111", "jay@email.com", "school")
+        return self.name < other.name # Compare the names alphabetically
+    
+class ContactBook:
+    """Represents a collection of Contact objects."""
 
-    assert contact1 == contact2
+    def __init__(self, owner):
+        """initializes a contactbook object"""
+         # Save the owner's name
+        self.owner = owner
+        self.contacts = [] # Start with an empty list of contacts
 
+    def add_contact(self, contact):
+        """adds a contact object to the contact book"""
+        if not isinstance(contact, Contact):
+            raise ValueError("Only Contact objects can be added.")
+        self.contacts.append(contact)
 
-def test_contact_less_than():
-    contact1 = Contact("Alex Kim", "240-555-2222", "alex@email.com", "work")
-    contact2 = Contact("Jay Pham", "301-555-1111", "jay@email.com", "school")
+    def get_categories(self):
+        """returns a set of unique contact categories"""
+        categories = set()
 
-    assert contact1 < contact2
+        for contact in self.contacts:
+            categories.add(contact.category)
 
+        return categories
 
-def test_contact_repr():
-    contact = Contact("Jay Pham", "301-555-1111", "jay@email.com", "school")
+    def get_category_counts(self):
+        """returns a dictionary counting contacts by their categories using counting pattern"""
+        counts = {}
 
-    assert repr(contact) == (
-        "Contact('Jay Pham', '301-555-1111', "
-        "'jay@email.com', 'school')"
-    )
+        for contact in self.contacts: 
+            counts[contact.category] = counts.get(contact.category, 0) + 1
 
+        return counts
 
-def test_contact_str():
-    contact = Contact("Jay Pham", "301-555-1111", "jay@email.com", "school")
+    def search_by_name(self, name):
+        matches = [] # Store all matching contacts
+        # Check each contact in the contact book
+        for contact in self.contacts: # Compare names without worrying about uppercase or lowercase
+            if contact.name.lower() == name.lower(): 
+                matches.append(contact)
 
-    assert str(contact) == (
-        "Jay Pham | Phone: 301-555-1111 | "
-        "Email: jay@email.com | Category: school"
-    )
+        return matches
+     
+    def get_contact_records(self):
+    
+        """Return all contacts as tuples."""
+        
+        records = [] # Store each contact as a tuple
 
+        for contact in self.contacts: # Convert every contact into a tuple and add it to the list
+            records.append(
+            (
+                contact.name,
+                contact.phone,
+                contact.email,
+                contact.category
+            )
+        )
 
-def test_contact_empty_name_raises_error():
-    try:
-        Contact("", "301", "jay@email.com", "school")
-        assert False
-    except ValueError:
-        assert True
+        return records
+    
+    
+    def __repr__(self):
+        """ returns a representation of the ContactBook object."""
+        return f"ContactBook('{self.owner}', {self.contacts})"
 
+    def __str__(self):
 
-def test_contact_empty_phone_raises_error():
-    try:
-        Contact("Jay Pham", "", "jay@email.com", "school")
-        assert False
-    except ValueError:
-        assert True
+        """returns the number of contacts in the contact book"""
+        return f"{self.owner}'s Contact Book with {len(self.contacts)} contacts"
 
+    def __len__(self):  
+     """Check if a contact exists in the contact book.
 
-def test_contact_empty_email_raises_error():
-    try:
-        Contact("Jay Pham", "301", "", "school")
-        assert False
-    except ValueError:
-        assert True
+        Args:
+            contact (Contact): The contact to check.
 
+        Returns:
+            bool: True if the contact exists.
+        """    
+     return len(self.contacts) # Return the length of the contacts list
 
-def test_contact_book_add_contact_and_len():
-    contact = Contact("Jay Pham", "301-555-1111", "jay@email.com", "school")
-    book = ContactBook("Jonathan")
+    def __contains__(self, contact): # Check if the contact exists in the list
+        """returns an interator for the contacts list"""
+        return contact in self.contacts
 
-    book.add_contact(contact)
+    def __iter__(self): # Return an iterator for the contacts list
+        return iter(self.contacts)
 
-    assert len(book) == 1
+    def __getitem__(self, index): # Return the contact at the given position
+        """Return a contact at a specific index.
 
+        Args:
+            index (int): The position of the contact.
 
-def test_contact_book_contains():
-    contact = Contact("Jay Pham", "301-555-1111", "jay@email.com", "school")
-    book = ContactBook("Jonathan")
+        Returns:
+            Contact: The contact at the given index.
+        """
+        return self.contacts[index]
 
-    book.add_contact(contact)
+    def __add__(self, other): 
+        """
+     Combine two ContactBook objects.
 
-    assert contact in book
+        Args:
+            other (ContactBook): This is another contact book.
 
+        Returns:
+            ContactBook: A new combined contact book.
+        """
+        
+        if not isinstance(other, ContactBook): # Make sure the other object is also a ContactBook
+            return NotImplemented
+        new_book = ContactBook(self.owner + " and " + other.owner) # Create a new contact book with both owners' names
 
-def test_contact_book_indexing():
-    contact = Contact("Jay Pham", "301-555-1111", "jay@email.com", "school")
-    book = ContactBook("Jonathan")
+        for contact in self.contacts: # Add all contacts from the first contact book
+            new_book.add_contact(contact)
 
-    book.add_contact(contact)
+        for contact in other.contacts:  # Add all contacts from the second contact book
+            new_book.add_contact(contact)
 
-    assert book[0] == contact
+        return new_book
+if __name__ == "__main__":
 
+    """Run test code for the Contact Manager program."""
 
-def test_contact_book_iteration():
-    contact1 = Contact("Jay Pham", "301-555-1111", "jay@email.com", "school")
-    contact2 = Contact("Alex Kim", "240-555-2222", "alex@email.com", "work")
-    book = ContactBook("Jonathan")
-
-    book.add_contact(contact1)
-    book.add_contact(contact2)
-
-    names = []
-
-    for contact in book:
-        names.append(contact.name)
-
-    assert names == ["Jay Pham", "Alex Kim"]
-
-
-def test_contact_book_categories():
-    contact1 = Contact("Jay Pham", "301-555-1111", "jay@email.com", "school")
-    contact2 = Contact("Alex Kim", "240-555-2222", "alex@email.com", "work")
-    book = ContactBook("Jonathan")
-
-    book.add_contact(contact1)
-    book.add_contact(contact2)
-
-    assert book.get_categories() == {"school", "work"}
-
-
-def test_contact_book_category_counts():
     contact1 = Contact("Jay Pham", "301-555-1111", "jay@email.com", "school")
     contact2 = Contact("Alex Kim", "240-555-2222", "alex@email.com", "work")
     contact3 = Contact("Mia Lee", "443-555-3333", "mia@email.com", "school")
-    book = ContactBook("Jonathan")
-
-    book.add_contact(contact1)
-    book.add_contact(contact2)
-    book.add_contact(contact3)
-
-    assert book.get_category_counts() == {"school": 2, "work": 1}
-
-
-def test_contact_book_search_by_name():
-    contact = Contact("Jay Pham", "301-555-1111", "jay@email.com", "school")
-    book = ContactBook("Jonathan")
-
-    book.add_contact(contact)
-
-    assert book.search_by_name("Jay Pham") == [contact]
-    assert book.search_by_name("jay pham") == [contact]
-    assert book.search_by_name("Missing") == []
-
-
-def test_contact_book_records():
-    contact = Contact("Jay Pham", "301-555-1111", "jay@email.com", "school")
-    book = ContactBook("Jonathan")
-
-    book.add_contact(contact)
-
-    assert book.get_contact_records() == [
-        ("Jay Pham", "301-555-1111", "jay@email.com", "school")
-    ]
-
-
-def test_contact_book_add():
-    contact1 = Contact("Jay Pham", "301-555-1111", "jay@email.com", "school")
-    contact2 = Contact("Mia Lee", "443-555-3333", "mia@email.com", "school")
+    contact4 = Contact("Jay Pham", "301-555-1111", "jay@email.com", "school")
 
     book1 = ContactBook("Jonathan")
-    book2 = ContactBook("Friend")
-
     book1.add_contact(contact1)
-    book2.add_contact(contact2)
+    book1.add_contact(contact2)
 
-    combined_book = book1 + book2
+    book2 = ContactBook("Friend")
+    book2.add_contact(contact3)
 
-    assert len(combined_book) == 2
-    assert contact1 in combined_book
-    assert contact2 in combined_book
+    print(book1)
+    print()
 
+    print("All contacts:")
+    for contact in book1:
+        print(contact)
 
-def test_add_non_contact_raises_error():
-    book = ContactBook("Jonathan")
+    print()
+    print("Number of contacts:", len(book1))
 
-    try:
-        book.add_contact("not a contact")
-        assert False
-    except ValueError:
-        assert True
+    print()
+    print("First contact:", book1[0])
+
+    print()
+    print("Categories:", book1.get_categories())
+
+    print()
+    print("Category counts:", book1.get_category_counts())
+
+    print()
+    print("Search:", book1.search_by_name("Jay Pham"))
+
+    print()
+    print("Equality check:", contact1 == contact4)
+
+    print()
+    print("Membership:", contact1 in book1)
+
+    print()
+    print("Sorted:")
+    for contact in sorted(book1):
+        print(contact)
+
+    print()
+    combined = book1 + book2
+    print(combined)
+
+    for contact in combined:
+        print(contact) 
